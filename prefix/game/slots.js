@@ -4,7 +4,7 @@ module.exports = {
     category: 'Funny',
     name: 'slots',
     aliases: ['slot'],
-    description: 'Chơi slots',
+    description: 'Chơi slots (Cân nhắc đưa vào Casino)',
     run: async(client, message, arg) => {
         const Game = new Slots({
         message: message,

@@ -1,7 +1,7 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Collection } = require("discord.js");
 const User = require("../../models/user.model.js"); // Đường dẫn tới User model của bạn
 const { incBalance, decBalance } = require("../../helpers/userHelper.js"); // Import hàm tăng/giảm số dư
-
+const { prefix } = require('../../config.json');
 // Cấu hình trò chơi
 const MAX_BET_AMOUNT = 300000; // Giới hạn tiền cược tối đa
 const WIN_MULTIPLIER = 2.5;    // Hệ số nhân tiền thắng (đặt 100 thắng 300)
@@ -48,7 +48,7 @@ module.exports = {
             if (!userData) {
                 const embed = new EmbedBuilder()
                     .setColor("#D91656")
-                    .setDescription(`Bạn chưa có tài khoản Casino. Dùng lệnh \`${client.prefix}start\` để tạo tài khoản.`)
+                    .setDescription(`Bạn chưa có tài khoản Casino. Dùng lệnh \`${prefix}start\` để tạo tài khoản.`)
                     .setFooter({ text: `Người gửi: ${playerUsername}`, iconURL: playerAvatarURL });
                 return await message.channel.send({ embeds: [embed] });
             }
@@ -66,7 +66,7 @@ module.exports = {
             if (isNaN(betAmount) || betAmount <= 0) {
                 const embed = new EmbedBuilder()
                     .setColor("#D91656")
-                    .setDescription(`Vui lòng nhập số tiền cược hợp lệ (phải là số dương) hoặc 'all'. Ví dụ: \`${client.prefix}cups 1000\``);
+                    .setDescription(`Vui lòng nhập số tiền cược hợp lệ (phải là số dương) hoặc 'all'. Ví dụ: \`${prefix}cups 1000\``);
                 return await message.channel.send({ embeds: [embed] });
             }
 

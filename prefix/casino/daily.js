@@ -2,6 +2,7 @@ const User = require('../../models/user.model.js');
 const Daily = require('../../models/cooldowndaily.model.js'); // Đảm bảo đường dẫn đúng
 const { EmbedBuilder } = require("discord.js");
 const { primary } = require('../../color.json'); // Đảm bảo đường dẫn đúng và color.json tồn tại
+const { prefix } = require('../../config.json');
 
 function getRandomInteger(min, max) {
     min = Math.ceil(min);
@@ -28,7 +29,7 @@ module.exports = {
             if (!user) {
                 const embed = new EmbedBuilder()
                     .setColor(primary)
-                    .setDescription(`Bạn chưa có tài khoản Casino. Dùng lệnh \`\`\`${client.prefix}start\`\`\` để tạo tài khoản.`) // Sử dụng client.prefix
+                    .setDescription(`Bạn chưa có tài khoản Casino. Dùng lệnh \`\`\`${prefix}start\`\`\` để tạo tài khoản.`) // Sử dụng client.prefix
                     .setFooter({ text: `Người gửi: ${playerUsername}`, iconURL: playerAvatarURL });
                 return await message.channel.send({embeds: [embed]}); // Trả lời nhanh
             }

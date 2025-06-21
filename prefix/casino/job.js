@@ -1,6 +1,7 @@
 const { EmbedBuilder, Collection } = require("discord.js");
 const User = require("../../models/user.model.js"); // Đường dẫn tới User model của bạn
 const { incBalance } = require("../../helpers/userHelper.js"); // Import hàm tăng số dư
+const {prefix} = require('../../config.json');
 
 function getRandomInteger(min, max) {
     min = Math.ceil(min);
@@ -30,7 +31,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setColor("#D91656")
                     .setDescription(
-                        `Bạn chưa có tài khoản Casino. Dùng lệnh \`${client.prefix}start\` để tạo tài khoản.`
+                        `Bạn chưa có tài khoản Casino. Dùng lệnh \`${prefix}start\` để tạo tài khoản.`
                     )
                     .setFooter({
                         text: `Người gửi: ${playerUsername}`,

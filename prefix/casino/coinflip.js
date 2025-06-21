@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require("discord.js");
 const User = require("../../models/user.model.js"); // Đường dẫn tới User model của bạn
 const { incBalance, decBalance } = require("../../helpers/userHelper.js"); // Import hàm tăng/giảm số dư
+const { prefix } = require('../../config.json');
 
 // Thêm giới hạn tiền cược tối đa ở đây
 const MAX_BET_AMOUNT = 300000;
@@ -84,7 +85,7 @@ module.exports = {
             } else {
                 const embed = new EmbedBuilder()
                     .setColor("#D91656")
-                    .setDescription(`Vui lòng chọn "head", "tail", "h", hoặc "t". Ví dụ: \`${client.prefix}cf 1000 h\``);
+                    .setDescription(`Vui lòng chọn "head", "tail", "h", hoặc "t". Ví dụ: \`${prefix}cf 1000 h\``);
                 return await message.channel.send({ embeds: [embed] });
             }
 

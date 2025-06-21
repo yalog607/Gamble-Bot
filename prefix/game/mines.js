@@ -5,7 +5,7 @@ module.exports = {
     category: 'Funny',
     name: "mines",
     aliases: ['mine'],
-    description: 'Đào mìn',
+    description: 'Đào mìn (Cân nhắc đưa vào Casino)',
     run: async(client, message, arg) => {
         try {
             const Game = new Minesweeper({
