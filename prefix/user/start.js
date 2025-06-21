@@ -1,6 +1,6 @@
 const User = require('../../models/user.model.js');
 const { EmbedBuilder } = require("discord.js");
-const { primary } = require("../../color.json"); // Đảm bảo đường dẫn đúng
+const { primary, success, danger } = require("../../color.json"); // Đảm bảo đường dẫn đúng
 
 module.exports = {
     cooldown: 3000,
@@ -21,7 +21,7 @@ module.exports = {
             
             if (userDB){
                 const embedExists = new EmbedBuilder()
-                    .setColor(primary)
+                    .setColor(danger)
                     .setDescription(`Bạn đã có tài khoản Casino rồi!`)
                     .setFooter({ text: `Người gửi: ${playerUsername}`, iconURL: playerAvatarURL });
                 // Trong prefix command, không có flags: MessageFlags.Ephemeral
@@ -35,7 +35,7 @@ module.exports = {
                 });
 
                 const embedSuccess = new EmbedBuilder()
-                    .setColor(primary)
+                    .setColor(success)
                     .setDescription(`Tạo tài khoản Casino thành công ✨\nBạn được tặng **$100** để bắt đầu!`) // Thêm thông tin về tiền khởi tạo
                     .setFooter({ text: `Người gửi: ${playerUsername}`, iconURL: playerAvatarURL });
                 return await message.channel.send({embeds: [embedSuccess]});
@@ -43,7 +43,7 @@ module.exports = {
         } catch (error) {
             console.error('Lỗi ở start command (prefix): ', error);
             const errorEmbed = new EmbedBuilder()
-                .setColor("Red")
+                .setColor(danger)
                 .setDescription(`Có lỗi xảy ra khi tạo tài khoản. Vui lòng thử lại sau.`)
                 .setFooter({ text: `Người gửi: ${playerUsername}`, iconURL: playerAvatarURL });
             return await message.channel.send({embeds: [errorEmbed]});

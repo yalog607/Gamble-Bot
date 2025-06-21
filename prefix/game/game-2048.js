@@ -1,4 +1,5 @@
 const { TwoZeroFourEight } = require('discord-gamecord');
+const { primary, success, danger } = require('../../color.json');
 
 module.exports = {
     cooldown: 3000,
@@ -11,7 +12,7 @@ module.exports = {
         isSlashGame: false,
         embed: {
             title: '2048',
-            color: '#5865F2'
+            color: primary
         },
         emojis: {
             up: '⬆️',

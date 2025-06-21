@@ -2,6 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const User = require("../../models/user.model.js"); // Đường dẫn tới User model của bạn
 const { incBalance, decBalance } = require("../../helpers/userHelper.js"); // Import hàm tăng/giảm số dư
 const { prefix } = require('../../config.json');
+const { success, danger } = require('../../color.json');
 
 // Thêm giới hạn tiền cược tối đa ở đây
 const MAX_BET_AMOUNT = 300000;
@@ -29,7 +30,7 @@ module.exports = {
             const userData = await User.findOne({ userId: userID });
             if (!userData) {
                 const embed = new EmbedBuilder()
-                    .setColor("#D91656")
+                    .setColor(danger)
                     .setDescription(
                         `Bạn chưa có tài khoản Casino. Dùng lệnh \`${client.prefix}start\` để tạo tài khoản.`
                     )
@@ -53,7 +54,7 @@ module.exports = {
 
             if (isNaN(betAmount) || betAmount <= 0) {
                 const embed = new EmbedBuilder()
-                    .setColor("#D91656")
+                    .setColor(danger)
                     .setDescription(`Vui lòng nhập số tiền cược hợp lệ (phải là số dương) hoặc 'all'.`);
                 return await message.channel.send({ embeds: [embed] });
             }
@@ -67,7 +68,7 @@ module.exports = {
             // Kiểm tra xem người chơi có đủ tiền để đặt cược không
             if (userData.balance < betAmount) {
                 const embed = new EmbedBuilder()
-                    .setColor("#D91656")
+                    .setColor(danger)
                     .setDescription(`Bạn không đủ tiền để đặt cược **$${new Intl.NumberFormat("en").format(betAmount)}**. Số dư hiện tại của bạn là **$${new Intl.NumberFormat("en").format(userData.balance)}**.`);
                 return await message.channel.send({ embeds: [embed] });
             }
@@ -84,7 +85,7 @@ module.exports = {
                 playerChoice = playerChoiceInput;
             } else {
                 const embed = new EmbedBuilder()
-                    .setColor("#D91656")
+                    .setColor(danger)
                     .setDescription(`Vui lòng chọn "head", "tail", "h", hoặc "t". Ví dụ: \`${prefix}cf 1000 h\``);
                 return await message.channel.send({ embeds: [embed] });
             }
@@ -105,12 +106,12 @@ module.exports = {
                 winAmount = betAmount * 2; // Thắng gấp đôi số tiền cược
                 await incBalance(userID, winAmount); // Tăng số dư
                 resultMessage = `🎉 Chúc mừng! Đồng xu đã ra **${coinResult.toUpperCase()}** và bạn đã thắng **$${new Intl.NumberFormat("en").format(betAmount)}**!`;
-                embedColor = "#00FF9C"; // Màu xanh lá cây cho thắng
+                embedColor = success; // Màu xanh lá cây cho thắng
                 userData.balance += winAmount; // Cập nhật số dư cuối cùng trong bộ nhớ
             } else {
                 // Người chơi thua
                 resultMessage = `💔 Rất tiếc! Đồng xu đã ra **${coinResult.toUpperCase()}** và bạn đã thua **$${new Intl.NumberFormat("en").format(betAmount)}**.`;
-                embedColor = "#D91656"; // Màu đỏ cho thua
+                embedColor = danger; // Màu đỏ cho thua
                 // userData.balance đã được cập nhật khi đặt cược, không cần thay đổi thêm
             }
 
@@ -134,7 +135,7 @@ module.exports = {
         } catch (error) {
             console.error("Có lỗi ở lệnh coinflip:", error);
             const errorEmbed = new EmbedBuilder()
-                .setColor("#D91656")
+                .setColor(danger)
                 .setDescription("Có lỗi xảy ra khi thực hiện lệnh coinflip. Vui lòng liên hệ với admin.");
             await message.channel.send({ embeds: [errorEmbed] });
         }

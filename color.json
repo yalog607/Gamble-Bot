@@ -1,3 +1,6 @@
 {
-    "primary": "#FED2E2"
+    "primary": "#FED2E2",
+    "success": "#00FF9C",
+    "danger": "#D91656",
+    "purple": "#AA60C8"
 }

@@ -1,6 +1,6 @@
 const User = require('../../models/user.model.js');
 const { EmbedBuilder } = require("discord.js");
-const { primary } = require('../../color.json'); // Đảm bảo đường dẫn đúng
+const { primary, success, danger } = require('../../color.json');
 const { adminId } = require('../../config.json');
 
 module.exports = {

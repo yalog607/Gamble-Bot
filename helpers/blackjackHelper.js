@@ -29,10 +29,10 @@ async function createNewDeck() {
 // Hàm này trả về giá trị bài dạng chuỗi để hiển thị (ví dụ: "A♠️", "10♥️")
 function formatCardValueToString(cardObject) { // Đổi tên tham số để rõ ràng là nhận object
     // API trả về '10' dưới dạng '10', J/Q/K/A là tên đầy đủ
-    // const value = cardObject.code.toLowerCase();
-    const value = cardObject.value === '10' ? '10' : cardObject.value[0];
-    // return `<:${value}:${deckOfCards[value]}>`;
-    return `${value}${SUITS[cardObject.suit]}`;
+    const value = cardObject.code.toLowerCase();
+    return `<:${value}:${deckOfCards[value]}>`;
+    // const value = cardObject.value === '10' ? '10' : cardObject.value[0];
+    // return `${value}${SUITS[cardObject.suit]}`;
 }
 
 
@@ -71,7 +71,7 @@ function formatHandForDisplay(arrOfCardObjects, hideDealerCard = false) {
         // Ẩn lá bài thứ hai của Dealer
         cardsToDisplay[1] = '??'; 
     }
-    return '```' + cardsToDisplay.join('  ') + '```';
+    return '' + cardsToDisplay.join(`  `) + '';
 }
 
 async function drawNewCard(deckID) {

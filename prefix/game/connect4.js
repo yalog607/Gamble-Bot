@@ -1,6 +1,7 @@
 const { Connect4 } = require('discord-gamecord');
 const { EmbedBuilder } = require('discord.js');
-const { color, prefix } = require('../../config.json');
+const { prefix } = require('../../config.json');
+const { primary, success, danger } = require('../../color.json');
 
 module.exports = {
     cooldown: 3000,
@@ -11,7 +12,7 @@ module.exports = {
     run: async(client, message, arg) => {
         if(!arg[0]) {
             const embed = new EmbedBuilder()
-                .setColor(color)
+                .setColor(danger)
                 .setDescription(`Cú pháp: ${prefix}conn4 <@user>`);
             return await message.channel.send({embeds: [embed]});
         }
@@ -23,7 +24,7 @@ module.exports = {
             embed: {
                 title: 'Connect4 Game',
                 statusTitle: 'Status',
-                color: color
+                color: primary
             },
             emojis: {
                 board: '⚪',

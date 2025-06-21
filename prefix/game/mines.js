@@ -1,4 +1,5 @@
 const { Minesweeper } = require('discord-gamecord');
+const { primary, success, danger } = require('../../color.json');
 
 module.exports = {
     cooldown: 3000,
@@ -13,7 +14,7 @@ module.exports = {
             isSlashGame: false,
             embed: {
                 title: 'Minesweeper',
-                color: '#5865F2',
+                color: primary,
                 description: 'Nhấn vào các nút để tìm các ô không phải là mìn.'
             },
             emojis: { flag: '🚩', mine: '💣' },

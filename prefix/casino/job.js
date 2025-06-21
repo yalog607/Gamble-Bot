@@ -2,6 +2,7 @@ const { EmbedBuilder, Collection } = require("discord.js");
 const User = require("../../models/user.model.js"); // Đường dẫn tới User model của bạn
 const { incBalance } = require("../../helpers/userHelper.js"); // Import hàm tăng số dư
 const {prefix} = require('../../config.json');
+const { success, danger } = require('../../color.json');
 
 function getRandomInteger(min, max) {
     min = Math.ceil(min);
@@ -29,7 +30,7 @@ module.exports = {
             const userData = await User.findOne({ userId: userID });
             if (!userData) {
                 const embed = new EmbedBuilder()
-                    .setColor("#D91656")
+                    .setColor(danger)
                     .setDescription(
                         `Bạn chưa có tài khoản Casino. Dùng lệnh \`${prefix}start\` để tạo tài khoản.`
                     )
@@ -45,7 +46,7 @@ module.exports = {
 
             // Gửi embed thông báo thành công
             const successEmbed = new EmbedBuilder()
-                .setColor("#00FF9C") // Màu xanh lá cây cho thành công
+                .setColor(success) // Màu xanh lá cây cho thành công
                 .setTitle("💰 Công việc hoàn thành!")
                 .setDescription(
                     `Bạn đã làm việc chăm chỉ và kiếm được **$${new Intl.NumberFormat(
@@ -69,7 +70,7 @@ module.exports = {
         } catch (error) {
             console.error("Có lỗi ở lệnh job:", error);
             const errorEmbed = new EmbedBuilder()
-                .setColor("#D91656")
+                .setColor(danger)
                 .setDescription("Có lỗi xảy ra khi thực hiện lệnh job. Vui lòng liên hệ với admin.");
             await message.channel.send({ embeds: [errorEmbed] });
         }

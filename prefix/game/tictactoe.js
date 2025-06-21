@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require('discord.js');
 const { TicTacToe } = require('discord-gamecord');
-const { color, prefix } = require('../../config.json');
+const { prefix } = require('../../config.json');
+const { primary, success, danger } = require('../../color.json');
 
 module.exports = {
     cooldown: 3000,
@@ -11,7 +12,7 @@ module.exports = {
     run: async(client, message, arg) => {
         if(!arg[0]) {
             const embed = new EmbedBuilder()
-                .setColor(color)
+                .setColor(danger)
                 .setDescription(`Cú pháp: ${prefix}tictactoe <@user>`);
             return await message.channel.send({embeds: [embed]});
         }
@@ -21,7 +22,7 @@ module.exports = {
         opponent: message.mentions.users.first(),
         embed: {
             title: 'Tic Tac Toe',
-            color: color,
+            color: primary,
             statusTitle: 'Status',
             overTitle: 'Game Over'
         },

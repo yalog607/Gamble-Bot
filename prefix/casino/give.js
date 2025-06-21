@@ -1,6 +1,6 @@
 const User = require('../../models/user.model.js');
 const { EmbedBuilder } = require("discord.js");
-const { primary } = require('../../color.json'); // Đảm bảo đường dẫn đúng
+const { success, danger } = require('../../color.json'); // Đảm bảo đường dẫn đúng
 const { prefix } = require('../../config.json');
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
         // Kiểm tra xem có người nhận hợp lệ không
         if (!recipent) {
             const embed = new EmbedBuilder()
-                .setColor("Red")
+                .setColor(danger)
                 .setDescription(`Vui lòng đề cập người nhận hoặc cung cấp ID hợp lệ.`)
                 .setFooter({ text: `Người gửi: ${sender.username}`, iconURL: sender.displayAvatarURL({ dynamic: true }) });
             return await message.channel.send({embeds: [embed]});
@@ -35,7 +35,7 @@ module.exports = {
         // Kiểm tra người gửi và người nhận có phải là cùng một người không
         if (sender.id === recipent.id) {
             const embed = new EmbedBuilder()
-                .setColor("Red")
+                .setColor(danger)
                 .setDescription(`Bạn không thể tự chuyển tiền cho chính mình!`)
                 .setFooter({ text: `Người gửi: ${sender.username}`, iconURL: sender.displayAvatarURL({ dynamic: true }) });
             return await message.channel.send({embeds: [embed]});
@@ -46,7 +46,7 @@ module.exports = {
         // Kiểm tra số tiền hợp lệ
         if (isNaN(amount) || amount <= 0) {
             const embed = new EmbedBuilder()
-                .setColor("Red")
+                .setColor(danger)
                 .setDescription(`Vui lòng nhập số tiền hợp lệ để chuyển (phải lớn hơn 0).`)
                 .setFooter({ text: `Người gửi: ${sender.username}`, iconURL: sender.displayAvatarURL({ dynamic: true }) });
             return await message.channel.send({embeds: [embed]});
@@ -64,14 +64,14 @@ module.exports = {
 
             if (!senderDB) {
                 const embed = new EmbedBuilder()
-                    .setColor(primary)
+                    .setColor(danger)
                     .setDescription(`Bạn chưa có tài khoản Casino.\nDùng lệnh \`\`\`${prefix}start\`\`\` để tạo tài khoản.`)
                     .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
                 return await message.channel.send({embeds: [embed]});
             }
             if (!recipentDB) {
                 const embed = new EmbedBuilder()
-                    .setColor(primary)
+                    .setColor(danger)
                     .setDescription(`Người nhận \`${recipentUsername}\` chưa có tài khoản Casino.\nHọ cần dùng lệnh \`\`\`${prefix}start\`\`\` để tạo tài khoản.`)
                     .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
                 return await message.channel.send({embeds: [embed]});
@@ -79,7 +79,7 @@ module.exports = {
 
             if (senderDB.balance < amount) {
                 const embed = new EmbedBuilder()
-                    .setColor(primary)
+                    .setColor(danger)
                     .setDescription(`Bạn không đủ tiền để chuyển. Bạn có: **$${new Intl.NumberFormat("en").format(senderDB.balance)}**`)
                     .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
                 return await message.channel.send({embeds: [embed]});
@@ -91,7 +91,7 @@ module.exports = {
             await recipentDB.save();
 
             const embed = new EmbedBuilder()
-                .setColor(primary)
+                .setColor(success)
                 .setDescription(`Chuyển thành công **$${new Intl.NumberFormat("en").format(amount)}** cho \`${recipentUsername}\`.`)
                 .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
             return await message.channel.send({embeds: [embed]});
@@ -101,7 +101,7 @@ module.exports = {
             const senderAvatarURL = sender.displayAvatarURL({ dynamic: true });
 
             const errorEmbed = new EmbedBuilder()
-                .setColor("Red")
+                .setColor(danger)
                 .setDescription(`Có lỗi xảy ra khi chuyển tiền. Vui lòng thử lại sau.`)
                 .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
             return await message.channel.send({embeds: [errorEmbed]});

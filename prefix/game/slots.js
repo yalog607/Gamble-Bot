@@ -1,3 +1,4 @@
+const { primary, success, danger } = require('../../color.json');
 const { Slots } = require('discord-gamecord');
 module.exports = {
     cooldown: 3000,
@@ -11,7 +12,7 @@ module.exports = {
         isSlashGame: false,
         embed: {
             title: 'Slot Machine',
-            color: '#5865F2'
+            color: primary
         },
         slots: ['🍇', '🍊', '🍋', '🍌']
         });
