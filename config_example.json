@@ -1,0 +1,8 @@
+{
+	"token": "0987abcxyz",
+	"clientId": "12345678910",
+    "MONGO_URL": "mongo.com/123",
+    "prefix": ",",
+    "color": "#FED2E2",
+    "adminId": "12345678910"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "gamerguy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "deploy-cmd": "nodemon deploy-commands.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "canvafy": "^7.2.1",
+    "discord-gamecord": "^4.4.2",
+    "discord.js": "^14.19.3",
+    "mongoose": "^8.15.2"
+  }
+}
