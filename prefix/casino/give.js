@@ -9,6 +9,7 @@ module.exports = {
     name: 'give', // Tên lệnh
     aliases: ['pay', 'chuyen'], // Các biệt danh cho lệnh
     description: 'Chuyển tiền cho người khác', // Mô tả lệnh
+    usage: "<user> <amount>", 
     run: async(client, message, args) => { // Thay đổi từ execute(interaction) sang run(client, message, args)
         const sender = message.author; // Người gửi là tác giả tin nhắn
         

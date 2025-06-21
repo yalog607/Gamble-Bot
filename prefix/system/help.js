@@ -50,7 +50,8 @@ module.exports = {
             const commandList = cmds.map(cmd => {
                 // Sử dụng command.aliases nếu có, ngược lại là rỗng
                 let aliases = cmd.aliases && cmd.aliases.length > 0 ? ` (Alias: \`${cmd.aliases.join('`, `')}\`)` : '';
-                return `\`${actualPrefix}${cmd.name}\`${aliases} - ${cmd.description}`;
+                let usage = cmd.usage && cmd.usage.length > 0 ? ` ${cmd.usage}` : '';
+                return `\`${actualPrefix}${cmd.name}${usage}\`${aliases} - ${cmd.description}`;
             }).join('\n');
 
             embed.addFields({
@@ -58,6 +59,22 @@ module.exports = {
                 value: commandList.length > 0 ? commandList : 'Không có lệnh nào trong danh mục này.',
                 inline: false
             });
+
+            const notices = [
+                '<bet>: Số tiền cược',
+                '<amount>: Số tiền',
+                '<user>: Tag người chơi'
+            ];
+            const noticeList = notices.map(note => {
+                return `\`${note}\``;
+            }).join('\n');
+
+            embed.addFields({
+                name: 'Chú thích:',
+                value: noticeList.length > 0 ? noticeList : 'Không có chú thích',
+                inline: false
+            });
+            
 
             embed.setFooter({ text: `Yêu cầu bởi: ${message.author.username}`, iconURL: message.author.displayAvatarURL({ dynamic: true }) });
             return embed;

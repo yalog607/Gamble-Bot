@@ -30,7 +30,7 @@ module.exports = {
     name: "cups",
     aliases: ["cup"],
     description: "Đoán vị trí của quả bóng trong 3 chiếc cốc",
-    usage: "<số tiền | all>", 
+    usage: "<bet>", 
     run: async (client, message, args) => {
         const playerUsername = message.author.username;
         const playerAvatarURL = message.author.displayAvatarURL({ dynamic: true });

@@ -21,11 +21,12 @@ const { decBalance, incBalance } = require("../../helpers/userHelper.js");
 const PRIMARY_COLOR = "#AA60C8";
 
 module.exports = {
-    cooldown: 5000,
+  cooldown: 5000,
   category: 'Casino',
   name: "blackjack", // Tên lệnh
   aliases: ["bj"], // Các biệt danh của lệnh
-  description: "Chơi Xì Dách Vietnamese 🃏", // Mô tả lệnh
+  description: "Chơi Xì Dách Vietnamese 🃏",
+  usage: '<bet>',
   run: async (client, message, args) => {
     // Thay đổi từ execute(interaction) sang run(client, message, args)
     try {

@@ -18,8 +18,8 @@ module.exports = {
     category: 'Casino',
     name: "coinflip",
     aliases: ["cf", "latdongxu"],
-    description: "Lật đồng xu head/tail (hoặc h/t)",
-    usage: "<số tiền | all> <head/tail/h/t>", // Hướng dẫn sử dụng lệnh
+    description: "Lật đồng xu head/tail",
+    usage: "<bet> <h/t>", // Hướng dẫn sử dụng lệnh
     run: async (client, message, args) => {
         const playerUsername = message.author.username;
         const playerAvatarURL = message.author.displayAvatarURL({ dynamic: true }); // Đã sửa lỗi chính tả ở đây
