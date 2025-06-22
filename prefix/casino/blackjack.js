@@ -446,13 +446,19 @@ module.exports = {
               dealerHand.push(newCardDealer);
               dealerScoreAtBust = calculateHandValue(dealerHand);
             }
-
+            const dealerIsNguLinh = isNguLinh(dealerHand);
             let finalMessage = "";
             // Nếu người chơi quắc, kiểm tra Dealer
             if (isBust(dealerHand)) {
               finalMessage = "🤝 HÒA! Cả hai cùng quắc!";
               currentEmbed.setColor("#FFEB55"); // Màu vàng cho hòa
               await incBalance(userID, wager); // Người chơi được hoàn tiền cược
+            } else if (dealerIsNguLinh) {
+              finalMessage = `🫠 DEALER NGŨ LINH! Bạn thua! (-$${new Intl.NumberFormat(
+                "en"
+              ).format(2*wager)}).`;
+              currentEmbed.setColor("#D91656");
+              await decBalance(userID, wager);
             } else {
               finalMessage = `💔 QUẮC! Bạn thua (-$${new Intl.NumberFormat(
                 "en"
