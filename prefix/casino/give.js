@@ -26,31 +26,19 @@ module.exports = {
 
         // Kiểm tra xem có người nhận hợp lệ không
         if (!recipent) {
-            const embed = new EmbedBuilder()
-                .setColor(danger)
-                .setDescription(`Vui lòng đề cập người nhận hoặc cung cấp ID hợp lệ.`)
-                .setFooter({ text: `Người gửi: ${sender.username}`, iconURL: sender.displayAvatarURL({ dynamic: true }) });
-            return await message.channel.send({embeds: [embed]});
+            return await message.reply(`Vui lòng tag người nhận hoặc cung cấp ID hợp lệ.`);
         }
 
         // Kiểm tra người gửi và người nhận có phải là cùng một người không
         if (sender.id === recipent.id) {
-            const embed = new EmbedBuilder()
-                .setColor(danger)
-                .setDescription(`Bạn không thể tự chuyển tiền cho chính mình!`)
-                .setFooter({ text: `Người gửi: ${sender.username}`, iconURL: sender.displayAvatarURL({ dynamic: true }) });
-            return await message.channel.send({embeds: [embed]});
+            return await message.reply(`Bạn không thể tự chuyển tiền cho chính mình!`);
         }
 
         const amount = parseInt(args[1]); // Số tiền từ args[1]
 
         // Kiểm tra số tiền hợp lệ
         if (isNaN(amount) || amount <= 0) {
-            const embed = new EmbedBuilder()
-                .setColor(danger)
-                .setDescription(`Vui lòng nhập số tiền hợp lệ để chuyển (phải lớn hơn 0).`)
-                .setFooter({ text: `Người gửi: ${sender.username}`, iconURL: sender.displayAvatarURL({ dynamic: true }) });
-            return await message.channel.send({embeds: [embed]});
+            return await message.reply(`Vui lòng nhập số tiền hợp lệ để chuyển (phải lớn hơn 0).`);
         }
 
         try {
@@ -59,31 +47,17 @@ module.exports = {
 
             // Lấy thông tin người gửi/người nhận cho footer
             const senderUsername = sender.username;
-            const senderAvatarURL = sender.displayAvatarURL({ dynamic: true });
             const recipentUsername = recipent.username;
-            const recipentAvatarURL = recipent.displayAvatarURL({ dynamic: true });
 
             if (!senderDB) {
-                const embed = new EmbedBuilder()
-                    .setColor(danger)
-                    .setDescription(`Bạn chưa có tài khoản Casino.\nDùng lệnh \`\`\`${prefix}start\`\`\` để tạo tài khoản.`)
-                    .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
-                return await message.channel.send({embeds: [embed]});
+                return await message.reply(`Bạn chưa có tài khoản Casino.\nDùng lệnh \`\`\`${prefix}start\`\`\` để tạo tài khoản.`);
             }
             if (!recipentDB) {
-                const embed = new EmbedBuilder()
-                    .setColor(danger)
-                    .setDescription(`Người nhận \`${recipentUsername}\` chưa có tài khoản Casino.\nHọ cần dùng lệnh \`\`\`${prefix}start\`\`\` để tạo tài khoản.`)
-                    .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
-                return await message.channel.send({embeds: [embed]});
+                return await message.reply(`Người nhận \`${recipentUsername}\` chưa có tài khoản Casino.\nHọ cần dùng lệnh \`\`\`${prefix}start\`\`\` để tạo tài khoản.`);
             }
 
             if (senderDB.balance < amount) {
-                const embed = new EmbedBuilder()
-                    .setColor(danger)
-                    .setDescription(`Bạn không đủ tiền để chuyển. Bạn có: **$${new Intl.NumberFormat("en").format(senderDB.balance)}**`)
-                    .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
-                return await message.channel.send({embeds: [embed]});
+                return await message.reply(`Bạn không đủ tiền để chuyển.`);
             }
             
             senderDB.balance -= amount;
@@ -91,21 +65,10 @@ module.exports = {
             await senderDB.save();
             await recipentDB.save();
 
-            const embed = new EmbedBuilder()
-                .setColor(success)
-                .setDescription(`Chuyển thành công **$${new Intl.NumberFormat("en").format(amount)}** cho \`${recipentUsername}\`.`)
-                .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
-            return await message.channel.send({embeds: [embed]});
+            return await message.channel.send(`💳 **${senderUsername}** | Chuyển thành công **$${new Intl.NumberFormat("en").format(amount)}** cho \`${recipentUsername}\`.`);
         } catch (error) {
-            console.error('Có lỗi trong give command (prefix):', error); 
-            const senderUsername = sender.username;
-            const senderAvatarURL = sender.displayAvatarURL({ dynamic: true });
-
-            const errorEmbed = new EmbedBuilder()
-                .setColor(danger)
-                .setDescription(`Có lỗi xảy ra khi chuyển tiền. Vui lòng thử lại sau.`)
-                .setFooter({ text: `Người gửi: ${senderUsername}`, iconURL: senderAvatarURL });
-            return await message.channel.send({embeds: [errorEmbed]});
+            console.error('Có lỗi trong give command (prefix):', error);
+            return await message.reply(`Có lỗi xảy ra khi chuyển tiền. Vui lòng thử lại sau.`);
         }
     }
 };

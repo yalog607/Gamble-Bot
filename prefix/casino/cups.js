@@ -3,6 +3,7 @@ const User = require("../../models/user.model.js"); // Đường dẫn tới Use
 const { incBalance, decBalance } = require("../../helpers/userHelper.js"); // Import hàm tăng/giảm số dư
 const { prefix } = require('../../config.json');
 const { success, danger, purple } = require('../../color.json');
+const { convertInt } = require('../../helpers/utility.js');
 
 // Cấu hình trò chơi
 const MAX_BET_AMOUNT = 300000; // Giới hạn tiền cược tối đa
@@ -81,7 +82,7 @@ module.exports = {
             if (userData.balance < betAmount) {
                 const embed = new EmbedBuilder()
                     .setColor(danger)
-                    .setDescription(`Bạn không đủ tiền để đặt cược **$${new Intl.NumberFormat("en").format(betAmount)}** ${COIN_EMOJI}. Số dư hiện tại của bạn là **${new Intl.NumberFormat("en").format(userData.balance)}** ${COIN_EMOJI}.`);
+                    .setDescription(`Bạn không đủ tiền để đặt cược **$${convertInt(betAmount)}** ${COIN_EMOJI}. Số dư hiện tại của bạn là **${convertInt(userData.balance)}** ${COIN_EMOJI}.`);
                 return await message.channel.send({ embeds: [embed] });
             }
 
@@ -124,7 +125,7 @@ module.exports = {
                     `**Chọn 1 chiếc cốc**\n` +
                     `\n` +
                     `${initialCupsDisplay}\n\n` + 
-                    `Bạn đã cược **$${new Intl.NumberFormat("en").format(betAmount)}** ${COIN_EMOJI}`
+                    `Bạn đã cược **$${convertInt(betAmount)}** ${COIN_EMOJI}`
                 )
                 .setFooter({
                     text: `Người chơi: ${playerUsername}`,
@@ -180,12 +181,12 @@ module.exports = {
                             winAmount = actualBetAmount * WIN_MULTIPLIER;
                             await incBalance(userID, winAmount);
                             
-                            resultDescription = `Bạn thắng **$${new Intl.NumberFormat("en").format(winAmount)}**\nBạn đã tìm thấy quả bóng!`;
+                            resultDescription = `Bạn thắng **$${convertInt(winAmount)}**\nBạn đã tìm thấy quả bóng!`;
                             embedColor = success; // Màu xanh lá cây cho thắng
                             // updatedUserData.balance đã được cập nhật bởi incBalance, không cần cập nhật lại trong bộ nhớ
                         } else {
                             // Người chơi thua
-                            resultDescription = `Bạn thua **$${new Intl.NumberFormat("en").format(actualBetAmount)}**\nBạn chọn cốc số **${chosenCup}** nhưng quả bóng ở trong cốc số **${actualBallPositionIndex + 1}**`;
+                            resultDescription = `Bạn thua **$${convertInt(actualBetAmount)}**\nBạn chọn cốc số **${chosenCup}** nhưng quả bóng ở trong cốc số **${actualBallPositionIndex + 1}**`;
                             embedColor = danger; // Màu đỏ cho thua
                             // Số dư đã được cập nhật khi đặt cược (đã trừ ban đầu)
                         }
@@ -228,7 +229,7 @@ module.exports = {
                     const expiredEmbed = new EmbedBuilder()
                         .setColor(danger)
                         .setTitle("Cups - Đã hết thời gian!")
-                        .setDescription(`Trò chơi của bạn đã hết thời gian. **${new Intl.NumberFormat("en").format(betAmount)}** ${COIN_EMOJI} tiền cược đã được hoàn lại.`);
+                        .setDescription(`Trò chơi của bạn đã hết thời gian. **${convertInt(betAmount)}** ${COIN_EMOJI} tiền cược đã được hoàn lại.`);
                     
                     try {
                         // Cập nhật tin nhắn với thông báo hết thời gian và loại bỏ buttons

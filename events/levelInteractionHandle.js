@@ -39,7 +39,7 @@ module.exports = {
                 user.xp -= xpNeeded;
                 user.level++;
 
-                const coolDownTime = 60000;
+                const coolDownTime = 30000;
                 cooldowns.set(interaction.user.id, Date.now()+coolDownTime);
 
                 const balanceToAdd = user.level === 2 ? 10000 : 10000 + (user.level -2) * 5000;

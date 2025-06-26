@@ -33,7 +33,7 @@ module.exports = {
         }
 
         // Nếu không trong cooldown hoặc cooldown đã hết, đặt cooldown mới
-        const coolDownTime = 60000; // 60 giây
+        const coolDownTime = 30000; // 60 giây
         messageXPCoolDowns.set(userID, Date.now() + coolDownTime);
         // --- Kết thúc phần Cooldown mới ---
 
