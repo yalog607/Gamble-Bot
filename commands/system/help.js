@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } = require('discord.js');
-const { primary } = require('../../color.json'); // Đảm bảo đường dẫn đúng so với vị trí của file này
+const { primary } = require('../../color.json');
 const { prefix } = require('../../config.json')
-
-// KHÔNG CẦN prefix ở đây vì đây là Slash Command
 
 module.exports = {
     // Đây là cách định nghĩa lệnh slash command
@@ -13,12 +11,7 @@ module.exports = {
     cooldown: 5, // Cooldown cho lệnh slash (tính bằng giây)
     category: 'System', // Category cho lệnh này.
 
-    async execute(interaction) { // Đổi từ run sang execute, nhận interaction thay vì message
-        // Không cần `actualPrefix` vì đây là slash command
-        // Lệnh của bạn cần có thuộc tính `prefix` để chứa tất cả các lệnh prefix
-        // và `slashCommands` để chứa tất cả các lệnh slash.
-        // Giả định `client.commands` chứa prefix commands (từ prefix handler)
-        // và `client.slashCommands` chứa slash commands (từ slash handler)
+    async execute(interaction) {
         const client = interaction.client;
         const allCommands = new Map();
 
@@ -46,7 +39,7 @@ module.exports = {
         if (allCommands.size === 0) {
             const noCommandsEmbed = new EmbedBuilder()
                 .setColor("Red")
-                .setDescription('Hiện tại không có lệnh nào được phân loại hoặc hiển thị.');
+                .setDescription('Hiện tại không có lệnh nào được đăng ký.');
             return await interaction.reply({ embeds: [noCommandsEmbed], flags: MessageFlags.Ephemeral}); // ephemeral để chỉ người dùng thấy
         }
 

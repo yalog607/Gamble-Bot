@@ -1,21 +1,16 @@
 const { EmbedBuilder } = require("discord.js");
 const User = require("../../models/user.model.js"); // Đường dẫn tới User model của bạn
 const { incBalance, decBalance } = require("../../helpers/userHelper.js"); // Import hàm tăng/giảm số dư
-const { prefix } = require('../../config.json');
-const { success, danger } = require('../../color.json');
+const { prefix } = require("../../config.json");
+const { success, danger } = require("../../color.json");
+const { getRandomInt, convertInt } = require("../../helpers/utility.js");
 
 // Thêm giới hạn tiền cược tối đa ở đây
 const MAX_BET_AMOUNT = 300000;
 
-function getRandomInteger(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 module.exports = {
     cooldown: 5000,
-    category: 'Casino',
+    category: "Casino",
     name: "coinflip",
     aliases: ["cf", "latdongxu"],
     description: "Lật đồng xu head/tail",
@@ -55,7 +50,9 @@ module.exports = {
             if (isNaN(betAmount) || betAmount <= 0) {
                 const embed = new EmbedBuilder()
                     .setColor(danger)
-                    .setDescription(`Vui lòng nhập số tiền cược hợp lệ (phải là số dương) hoặc 'all'.`);
+                    .setDescription(
+                        `Vui lòng nhập số tiền cược hợp lệ (phải là số dương) hoặc 'all'.`
+                    );
                 return await message.channel.send({ embeds: [embed] });
             }
             // ---------------------------------------------
@@ -67,10 +64,7 @@ module.exports = {
 
             // Kiểm tra xem người chơi có đủ tiền để đặt cược không
             if (userData.balance < betAmount) {
-                const embed = new EmbedBuilder()
-                    .setColor(danger)
-                    .setDescription(`Bạn không đủ tiền để đặt cược **$${new Intl.NumberFormat("en").format(betAmount)}**. Số dư hiện tại của bạn là **$${new Intl.NumberFormat("en").format(userData.balance)}**.`);
-                return await message.channel.send({ embeds: [embed] });
+                return await message.channel.send({ content: `Bạn không đủ tiền để cược <:23265kotek:1387483381180272650>` });
             }
 
             // Lấy lựa chọn của người chơi và chuẩn hóa nó
@@ -84,59 +78,47 @@ module.exports = {
             } else if (playerChoiceInput === "head" || playerChoiceInput === "tail") {
                 playerChoice = playerChoiceInput;
             } else {
-                const embed = new EmbedBuilder()
-                    .setColor(danger)
-                    .setDescription(`Vui lòng chọn "head", "tail", "h", hoặc "t". Ví dụ: \`${prefix}cf 1000 h\``);
-                return await message.channel.send({ embeds: [embed] });
+                playerChoice = "head";
             }
 
             // Giảm số dư của người chơi ngay lập tức (tiền đã được đặt cược)
             await decBalance(userID, betAmount);
-            // Cập nhật userData.balance trong bộ nhớ để tính toán số dư hiện tại sau khi cược
-            userData.balance -= betAmount; 
+            userData.balance -= betAmount;
 
-            // Tiến hành lật đồng xu
-            const coinResult = Math.random() < 0.5 ? "head" : "tail"; // 50% head, 50% tail
-            let winAmount = 0;
-            let resultMessage = "";
-            let embedColor = "";
+            const responseMsg = await message.channel.send(
+                `**${playerUsername}** cược **$${convertInt(
+                    betAmount
+                )}** vào **${playerChoice}**\nĐồng xu đang được tung... <a:coinflip:1387476414412099704>`
+            );
+            setTimeout(async () => {
+                const coinResult = Math.random() < 0.5 ? "head" : "tail"; // 50% head, 50% tail
+                let resultText = "";
+                let resultBal = 0;
+                let emoji = "";
+                let win = playerChoice === coinResult;
+                if (win) {
+                    resultText = "__Thắng__ rồi nè senpai~";
+                    resultBal = betAmount * 2;
+                    emoji = '<:catsmile:1387485175352660169>';
+                    await incBalance(userID, resultBal);
+                } else {
+                    resultText = "__Thua__ sạch rồi ní ơi";
+                    emoji = "<:catmeu:1387483381180272650>";
+                }
 
-            if (playerChoice === coinResult) {
-                // Người chơi thắng
-                winAmount = betAmount * 2; // Thắng gấp đôi số tiền cược
-                await incBalance(userID, winAmount); // Tăng số dư
-                resultMessage = `🎉 Chúc mừng! Đồng xu đã ra **${coinResult.toUpperCase()}** và bạn đã thắng **$${new Intl.NumberFormat("en").format(betAmount)}**!`;
-                embedColor = success; // Màu xanh lá cây cho thắng
-                userData.balance += winAmount; // Cập nhật số dư cuối cùng trong bộ nhớ
-            } else {
-                // Người chơi thua
-                resultMessage = `💔 Rất tiếc! Đồng xu đã ra **${coinResult.toUpperCase()}** và bạn đã thua **$${new Intl.NumberFormat("en").format(betAmount)}**.`;
-                embedColor = danger; // Màu đỏ cho thua
-                // userData.balance đã được cập nhật khi đặt cược, không cần thay đổi thêm
-            }
-
-            // Gửi embed kết quả
-            const resultEmbed = new EmbedBuilder()
-                .setColor(embedColor)
-                .setTitle("🪙 Kết quả Coin Flip!")
-                .setDescription(resultMessage)
-                .addFields(
-                    { name: "Bạn đã chọn", value: `\`${playerChoice.toUpperCase()}\``, inline: true },
-                    { name: "Số tiền cược", value: `$${new Intl.NumberFormat("en").format(betAmount)}`, inline: true },
-                    { name: "Số dư hiện tại", value: `$${new Intl.NumberFormat("en").format(userData.balance)}`, inline: true }
-                )
-                .setFooter({
-                    text: `Người chơi: ${playerUsername}`,
-                    iconURL: playerAvatarURL,
+                await responseMsg.edit({
+                    content: `**${playerUsername}** cược **$${convertInt(
+                        betAmount
+                    )}** vào **${playerChoice}**\nĐồng xu ra **${coinResult}** <:coin:1387481402395594813> - ${resultText}${win ? ` **$${convertInt(resultBal)}** ` : ' '}${emoji}`,
                 });
-
-            await message.channel.send({ embeds: [resultEmbed] });
-
+            }, getRandomInt(1800, 3000));
         } catch (error) {
             console.error("Có lỗi ở lệnh coinflip:", error);
             const errorEmbed = new EmbedBuilder()
                 .setColor(danger)
-                .setDescription("Có lỗi xảy ra khi thực hiện lệnh coinflip. Vui lòng liên hệ với admin.");
+                .setDescription(
+                    "Có lỗi xảy ra khi thực hiện lệnh coinflip. Vui lòng liên hệ với admin."
+                );
             await message.channel.send({ embeds: [errorEmbed] });
         }
     },

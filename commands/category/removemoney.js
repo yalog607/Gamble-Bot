@@ -26,7 +26,7 @@ module.exports = {
         });
 
         const targetUser = interaction.options.getUser('target');
-        const amount = interaction.options.getInteger('amount');
+        let amount = interaction.options.getInteger('amount');
 
         // Tìm tài khoản người dùng mục tiêu trong DB
         const userDB = await User.findOne({ userId: targetUser.id });
@@ -40,10 +40,7 @@ module.exports = {
 
         // Đảm bảo số tiền giảm không làm balance âm (trừ khi bạn muốn cho phép)
         if (userDB.balance < amount) {
-            const embed = new EmbedBuilder()
-                .setColor("Red")
-                .setDescription(`❌ **${targetUser.username}** chỉ có **$${new Intl.NumberFormat("en").format(userDB.balance)}**. Không thể giảm **$${new Intl.NumberFormat("en").format(amount)}**.`);
-            return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral});
+            amount = userDB.balance;
         }
 
         // Cập nhật số dư

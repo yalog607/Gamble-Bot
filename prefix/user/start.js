@@ -22,7 +22,7 @@ module.exports = {
             if (userDB){
                 const embedExists = new EmbedBuilder()
                     .setColor(danger)
-                    .setDescription(`Bạn đã có tài khoản Casino rồi!`)
+                    .setDescription(`Bạn đã có tài khoản Casino!`)
                     .setFooter({ text: `Người gửi: ${playerUsername}`, iconURL: playerAvatarURL });
                 // Trong prefix command, không có flags: MessageFlags.Ephemeral
                 // Tin nhắn sẽ hiển thị công khai.
